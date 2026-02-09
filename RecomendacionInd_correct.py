@@ -4,7 +4,6 @@ from fractions import Fraction
 import pyodbc
 import warnings 
 
-
 # Settings the warnings to be ignored 
 warnings.filterwarnings('ignore') 
 
@@ -20,35 +19,20 @@ iIdCentro0 = 203
 iIdCentro1 = 204
 
 Historico_fecha= start_date + '_' + end_date
-Tienda='LA MARINA COLIMA'
+Tienda='***'
 
+with open("informacion.sql", "r", encoding="utf-8") as file:
+    query = file.read()
+    
+params = (
+    start_date,
+    end_date,
+    iIdCentro0,
+    iIdCentro1
+)
 
-query = f"""
-  SELECT cliente.iCodigo as Cuenta, sGenero as Genero, DATEDIFF(year, cliente.dFechaNacimiento,getdate()) as Edad, 
-  gpo_art.sCodigo as CodGpoArt, dep.sCodigo as CodDepa, gpo_art.sCodigo+'-'+dep.sCodigo as 'CodGpoArt-CodDepa',
-  cliente.fCapacidadPago as CapacidadPago,gpo_art.sArticuloGrupo as [GpoArt], centro.sCentro, cliente.sTipoCuenta, centro.sCadena as Negocio
-  FROM [BODESA_DWH].[dbo].[FactVenta] venta
-  inner join [BODESA_DWH].[dbo].[dimCliente] cliente on venta.iIdCliente=cliente.iIdCliente
-  inner join [BODESA_DWH].[dbo].[dimArticulo] art on art.iIdArticulo=venta.iIdArticulo
-  inner join [BODESA_DWH].[dbo].[dimArticuloGrupo] gpo_art on gpo_art.iIdArticuloGrupo=art.iIdArticuloGrupo
-  inner join [BODESA_DWH].[dbo].[dimDepartamento] dep on dep.iIdDepartamento=art.iIdDepartamento
-  inner join [BODESA_DWH].[dbo].[dimCentro] centro on venta.iIdCentro=centro.iIdCentro
-  where dFecha BETWEEN '{start_date}' AND '{end_date}'
-  and iCodigo<>-1 and iNegocio=1 AND SUBSTRING(cliente.sTipoCuenta , 1, 1) not in ('A','S','X','Y','D') -- AND sEstatus in ('ACTIVO', 'SUSPENDIDO') 
-  AND venta.iIdCentro in ( '{iIdCentro0}', '{iIdCentro1}' )
-  GROUP BY centro.sCentro,centro.sCadena,cliente.iCodigo, gpo_art.sArticuloGrupo, sGenero, DATEDIFF(year, cliente.dFechaNacimiento,getdate()), cliente.sTipoCuenta, gpo_art.sCodigo, dep.sCodigo, cliente.fCapacidadPago
-  ORDER BY iCodigo,CodGpoArt, GpoArt,Genero, Edad, sTipoCuenta
-"""
+df = pd.read_sql(query, connection, params=params)
 
-# iIdCentro     sCodigo         sCentro
-# 203		M001	        LA MARINA MADERO
-# 204		M002	        LA MARINA SAN FERNANDO
-# 205		M003	        LA MARINA ZAPOTLAN
-# 206		M004	        LA MARINA LA PIEDAD
-# 207		M005	        LA MARINA GUANAJUATO
-# 208	        M006	        LA MARINA MANZANILLO
-
-df = pd.read_sql(query, connection)
 connection.close()
 
 Excel_resultadosGpoTA = pd.DataFrame()
@@ -209,14 +193,4 @@ for c in list(range(len(cuentas_unicas))):
             'Region':Tienda 
         })], ignore_index=True)
 
-Excel_resultadosGpoTA.to_csv(f'C:/Users/jose.villa/Documents/recomendaciones_personalizadas/resultados/Excel_ResultadosGpoTA_{Tienda}.csv', index=False)
-Excel_resultadosGpoTB.to_csv(f'C:/Users/jose.villa/Documents/recomendaciones_personalizadas/resultados/Excel_ResultadosGpoTB_{Tienda}.csv', index=False)
-Excel_resultadosTA.to_csv(f'C:/Users/jose.villa/Documents/recomendaciones_personalizadas/resultados/Excel_ResultadosTA_{Tienda}.csv', index=False)
-Excel_resultadosTB.to_csv(f'C:/Users/jose.villa/Documents/recomendaciones_personalizadas/resultados/Excel_ResultadosTB_{Tienda}.csv', index=False)
-
-
-#Excel_resultadosGpoTA.to_csv(f'C:/Users/andrea.rodriguez/Documents/recomendacion_personalizada_isa/Excel_ResultadosGpoTA_{Tienda}.csv', index=False)
-#Excel_resultadosGpoTB.to_csv(f'C:/Users/andrea.rodriguez/Documents/recomendacion_personalizada_isa/Excel_ResultadosGpoTB_{Tienda}.csv', index=False)
-#Excel_resultadosTA.to_csv(f'C:/Users/andrea.rodriguez/Documents/recomendacion_personalizada_isa/Excel_ResultadosTA_{Tienda}.csv', index=False)
-#Excel_resultadosTB.to_csv(f'C:/Users/andrea.rodriguez/Documents/recomendacion_personalizada_isa/Excel_ResultadosTB_{Tienda}.csv', index=False)
 
