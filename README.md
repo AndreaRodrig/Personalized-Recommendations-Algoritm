@@ -1,5 +1,5 @@
 # Personalized Recommendation System Based on Customer Similarity
-🧠 Project Overview
+## Project Overview
 
 This project implements a personalized recommendation engine using transactional sales data, customer demographic features, and purchase behavior patterns.
 
@@ -15,7 +15,7 @@ Targeted marketing campaigns
 
 The solution is data-driven, interpretable, and business-oriented, making it suitable for real-world production environments.
 
-🚀 Analytical Approach
+## Analytical Approach
 
 The algorithm combines:
 
@@ -37,7 +37,7 @@ Historical purchases by product group
 
 Product department
 
-🔍 Methodology
+## Methodology
 
 Data extraction
 
@@ -89,7 +89,7 @@ Departments (TA / TB)
 
 Exported as CSV files for downstream consumption (BI tools, CRM, marketing platforms)
 
-📁 Output Files
+## Output Files
 
 The script generates four datasets:
 
@@ -103,26 +103,25 @@ Excel_ResultadosTB_*.csv → Departments (Low Ticket)
 
 Each file includes ranking, support metrics, and customer context.
 
-🛠️ Tech Stack
+## Tech Stack
 
-Python
+* Python
+* Pandas / NumPy
 
-Pandas / NumPy
+* SQL Server
 
-SQL Server
-
-pyodbc
+* pyodbc
 
 The solution is designed to be scalable, auditable, and easy to adapt for different business rules or markets.
 
-📈 Business Impact
+## Business Impact
 
 This approach enables:
 
-Higher conversion rates in personalized campaigns
+* Higher conversion rates in personalized campaigns
 
-Reduced noise from generic recommendations
+* Reduced noise from generic recommendations
 
-Prioritization of high-affinity products
+* Prioritization of high-affinity products
 
-Clear explainability of recommendations (interpretable logic)
+* Clear explainability of recommendations (interpretable logic)
