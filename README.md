@@ -54,17 +54,22 @@ High Ticket (TA): Strategically defined departments
 Low Ticket (TB): Remaining departments
 
 * Metric computation
+
 Frequency
+
 Support
+
 Total event count
+
 Relevance ranking
 
 * Result generation
 
 Top 10 recommendations per customer for:
 
-* Product groups (TA / TB)
-* Departments (TA / TB)
+Product groups (TA / TB)
+
+Departments (TA / TB)
 
 Exported as CSV files for downstream consumption (BI tools, CRM, marketing platforms)
 
